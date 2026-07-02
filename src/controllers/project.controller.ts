@@ -45,6 +45,8 @@ export async function getProject(req: Request, res: Response): Promise<void> {
     _id: id,
     $or: [{ owner: userId }, { members: userId }],
   })
+    .populate('owner', 'name email avatar')
+    .populate('members', 'name email avatar')
 
   if (!project) {
     res.status(404).json({ error: 'Project not found' })

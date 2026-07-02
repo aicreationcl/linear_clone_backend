@@ -37,6 +37,7 @@ export async function getTasks(req: Request, res: Response): Promise<void> {
 
   const tasks = await Task.find(filter)
     .select('title status priority assignee reporter dueDate order project createdAt updatedAt')
+    .populate('assignee', 'name email avatar')
     .sort({ order: 1 })
 
   res.json({ data: tasks.map(toTaskDTO) })
