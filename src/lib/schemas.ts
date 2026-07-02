@@ -29,8 +29,8 @@ export const createTaskSchema = z.object({
   description: z.string().optional(),
   status: taskStatus.optional(),
   priority: taskPriority.optional(),
-  assigneeId: z.string().optional(),
-  dueDate: z.string().optional(),
+  assigneeId: z.string().nullable().optional(),
+  dueDate: z.string().nullable().optional(),
 })
 
 export const updateTaskSchema = createTaskSchema.omit({ projectId: true }).partial()

@@ -50,8 +50,8 @@ export async function createTask(req: Request, res: Response): Promise<void> {
     status?: TaskStatus
     priority?: TaskPriority
     projectId: string
-    assigneeId?: string
-    dueDate?: string
+    assigneeId?: string | null
+    dueDate?: string | null
   }
 
   if (!title || !projectId) {
@@ -75,7 +75,7 @@ export async function createTask(req: Request, res: Response): Promise<void> {
     status: status ?? 'backlog',
     priority: priority ?? 'none',
     project: projectId,
-    assignee: assigneeId,
+    assignee: assigneeId ?? undefined,
     reporter: userId,
     dueDate: dueDate ? new Date(dueDate) : undefined,
     order,
@@ -126,7 +126,7 @@ export async function updateTask(req: Request, res: Response): Promise<void> {
     description?: string
     status?: TaskStatus
     priority?: TaskPriority
-    assigneeId?: string
+    assigneeId?: string | null
     dueDate?: string | null
   }
 
@@ -134,7 +134,9 @@ export async function updateTask(req: Request, res: Response): Promise<void> {
   if (description !== undefined) task.description = description
   if (status !== undefined) task.status = status
   if (priority !== undefined) task.priority = priority
-  if (assigneeId !== undefined) task.assignee = assigneeId as unknown as typeof task.assignee
+  if (assigneeId !== undefined) {
+    task.assignee = (assigneeId ?? undefined) as unknown as typeof task.assignee
+  }
   if (dueDate !== undefined) task.dueDate = dueDate ? new Date(dueDate) : undefined
 
   await task.save()
